@@ -132,13 +132,48 @@ const Element_Atomic_Masses = [
   "282","285","286","289","290","293","294","294"
 ];
 // --- yet to be verified --- //
-
-
-
-
-
-
-
+//
+const Common_Polyatomic_Ions_Names = [
+  "Acetate",
+  "Carbonate",
+  "Hydroxide",
+  "Nitrite",
+  "Nitrate",
+  "Chromate",
+  "Dichromate",
+  "Phosphate",
+  "Ammonium",
+  "Hypochlorite",
+  "Chlorite",
+  "Chlorate",
+  "Perchlorate",
+  "Permanganate",
+  "Sulfite",
+  "Sulfate",
+  "Cyanide",
+  "Peroxide"
+];
+const Common_Polyatomic_Ions_Formulas = [
+  "C2H3O2 MINUS ONE",
+  "CO3 MINUS TWO",
+  "OH MINUS ONE",
+  "NO2 MINUS ONE",
+  "NO3 MINUS ONE",
+  "CrO4 MINUS TWO",
+  "Cr2O7 MINUS TWO",
+  "PO4 MINUS THREE",
+  "NH4 PLUS ONE",
+  "ClO MINUS ONE",
+  "ClO2 MINUS ONE",
+  "ClO3 MINUS ONE",
+  "ClO4 MINUS ONE",
+  "MnO4 MINUS ONE",
+  "SO3 MINUS TWO",
+  "SO4 MINUS TWO",
+  "CN MINUS ONE",
+  "O2 MINUS TWO"
+];
+//
 
 
 
@@ -170,8 +205,8 @@ const Element_Atomic_Masses = [
 
 
 // ############ CONFIG ############
-let answerKey = Element_Names;
-let hintBook = Element_Symbols;
+let answerKey = Common_Polyatomic_Ions_Formulas;
+let hintBook = Common_Polyatomic_Ions_Names;
 const BLOCK_W = 100;
 const GAP = 5;
 const STEP = BLOCK_W + GAP; 
