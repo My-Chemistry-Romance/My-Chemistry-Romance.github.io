@@ -24,7 +24,7 @@
         height: 50px;
         left: calc(50% - 200px);
         top: 60vh;
-        transition: top 1s linear;
+        transition: top 0.35s ease-in;
       }
       .char-box {
         width: 50px;
@@ -52,7 +52,7 @@
         font-size: 14px;
         user-select: none;
         /* animate vertical movement */
-        transition: transform 1s ease-out;
+        transition: transform 0.35s ease-out;
         transform: translateY(100vh);
       }
       .ui {
@@ -85,18 +85,19 @@
         position: absolute;
         left: 12px;
         top: 12px;
-        width: 360px;
-        background: oklab(94.309% 0 -0.00011);
+        width: 300px;
+        background: oklab(93.4% -0.05228 -0.02939);
         border: 2px solid #d5ddec;
         padding: 10px;
         border-radius: 6px;
         overflow: hidden;
         height: 0px; 
-        transition: height 0.3s ease;
+        transition: width 0.3s ease, height 0.3s ease;
         padding: 6px;
       }
       .panel:hover {
         height: 100px;  
+        width: 500px;  /* full size */
       }
 
       textarea {
@@ -215,11 +216,17 @@
           <button onclick="location.href='index.html'">Home</button>
           <input type="button" id="restartBtn" value="Restart" />
           <button onclick="ScrambleData()">Scramble Data</button>
+          <button onclick="ReverseData()">Reverse Data</button>
           <button onclick="setData(Element_Symbols, Element_Names);">
             Element Symbols → Element Names
           </button>
           <button id="openPopupBtn" type="button">Open Menu</button>
         </div>
+      </div>
+      <div style="position: absolute; top: 12px; left: 400px; display: flex; align-items: center; gap: 6px;">
+        <label for="speedSlider">Speed:</label>
+        <input type="range" id="speedSlider" min="1" max="10" value="5">
+        <span id="speedValue">5</span>
       </div>
 
       <div
@@ -828,12 +835,28 @@
       const BLOCK_W = 100;
       const GAP = 5;
       const STEP = BLOCK_W + GAP;
-      const SECONDS_PER_BLOCK = 1; // each block gives user 1 seconds
-      const SPEED = STEP / SECONDS_PER_BLOCK; // px/s
+      let SECONDS_PER_BLOCK = 5; // each block gives user 1 seconds
+      let SPEED = STEP / SECONDS_PER_BLOCK; // px/s
 
+
+
+      //to learn, start at 10s and complete the game there, then slowly reduce the seconds by one. 
+      //then do the same in reverse then
+      //scramble it.
       // ############ CONFIG ############
 
       // ############# - CONTROLS - ##############
+      const speedSlider = document.getElementById("speedSlider");
+      const speedValue = document.getElementById("speedValue");
+      let val = 11 - Number(speedSlider.value);
+      speedValue.innerHTML = `${val} <span style="font-size:0.8em; color:gray;">(seconds/block)</span>`;
+      speedSlider.addEventListener("input", () => {
+        val = 11 - Number(speedSlider.value);
+        speedValue.innerHTML = `${val} <span style="font-size:0.8em; color:gray;">(seconds/block)</span>`;
+        SECONDS_PER_BLOCK = val;            // update global speed
+        SPEED = STEP / SECONDS_PER_BLOCK;   // recalc SPEED
+        console.log("Val:", val, " | SECONDS_PER_BLOCK:", SECONDS_PER_BLOCK)
+      });
 
       // Replace answerKey and hintBook from arrays or by global name (string).
       function setData(answerSrc, hintSrc) {
@@ -902,6 +925,13 @@
         hintBook.push(...newHints);
         return seed;
       }
+      function ReverseData() {
+        answerKey.reverse();
+        hintBook.reverse();
+      }
+
+
+
       function OrderData() {
         console.log(answerKey);
         answerKey.splice(0, answerKey.length, ...Element_Names.slice());
@@ -1054,12 +1084,15 @@
       document
         .getElementById("restartBtn")
         .addEventListener("click", restartGame);
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Ctrl") {
-          e.preventDefault();
+      const keysDown = new Set();
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
           restartGame();
         }
       });
+
+
       // ############# - Event Listeners - ##############
 
       // ############# - Main - ##############
@@ -1118,7 +1151,7 @@
             answerIndex < hintBook.length
               ? hintBook[answerIndex]
               : "no more hints";
-          status.textContent = `Index: ${answerIndex} | Blocks: ${blocks.length}`;
+          status.textContent = `Restart Shortcut: 'Enter' | Index: ${answerIndex} | Blocks: ${blocks.length}`;
         }
         requestAnimationFrame(loop);
       }
